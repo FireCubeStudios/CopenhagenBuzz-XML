@@ -1,13 +1,17 @@
 package dk.itu.moapd.copenhagenbuzz.aybo.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.EditText
 import androidx.core.view.WindowCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import dk.itu.moapd.copenhagenbuzz.aybo.R
 import dk.itu.moapd.copenhagenbuzz.aybo.models.Event
 import dk.itu.moapd.copenhagenbuzz.aybo.databinding.ActivityMainBinding
 import java.time.LocalDateTime
@@ -19,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.qualifiedName
     }
 
-    // GUI variables. (exercise 1)
+    private lateinit var topAppBar: MaterialToolbar
     private lateinit var eventName: EditText
     private lateinit var eventLocation: EditText
     private lateinit var eventDate: EditText
@@ -42,7 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topAppBar)
 
+        topAppBar = binding.topAppBar
         eventName = binding.contentMain.editTextEventName
         eventLocation = binding.contentMain.editTextEventLocation
         eventDate = binding.contentMain.editTextEventDate
@@ -68,6 +74,34 @@ class MainActivity : AppCompatActivity() {
 
             showMessage()
         }
+
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.login -> {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.logout -> {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_top_app_bar, menu)
+        return true
+    }
+
+    // Show login or logout button depending on if is logged in or logged out in the top app bar menu
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.login).isVisible = !intent.getBooleanExtra("IsLoggedIn", false)
+        menu.findItem(R.id.logout).isVisible = intent.getBooleanExtra("IsLoggedIn", false)
+        return true
     }
 
     private fun showMessage() {
