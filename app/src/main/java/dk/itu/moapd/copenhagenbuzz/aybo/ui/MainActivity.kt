@@ -13,11 +13,12 @@ import dk.itu.moapd.copenhagenbuzz.aybo.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
     // A set of private constants used in this class. (exercise 1)
+    private lateinit var binding: ActivityMainBinding
     companion object {
         private val TAG = MainActivity::class.qualifiedName
     }
+
     // GUI variables. (exercise 1)
     private lateinit var eventName: EditText
     private lateinit var eventLocation: EditText
@@ -25,8 +26,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var eventType: MaterialAutoCompleteTextView
     private lateinit var eventDescription: EditText
     private lateinit var addEventButton: FloatingActionButton
-
-    // TODO: Implement the missing GUI variables
 
     // An instance of the `Event` class. (exercise 1)
     private val event: Event = Event(
@@ -44,38 +43,30 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Exercise 1 boilerplate code:
-        eventName = findViewById(R.id.text_field_event_name)
-        eventLocation = findViewById(R.id.text_field_event_location)
-        eventDate = findViewById(R.id.text_field_event_date)
-        eventType = findViewById(R.id.text_field_event_type)
-        eventDescription = findViewById(R.id.text_field_event_description)
-        addEventButton = findViewById(R.id.fab_add_event)
+        eventName = binding.contentMain.editTextEventName
+        eventLocation = binding.contentMain.editTextEventLocation
+        eventDate = binding.contentMain.editTextEventDate
+        eventType = binding.contentMain.autoCompleteEventType
+        eventDescription = binding.contentMain.editTextEventDescription
+        addEventButton = binding.contentMain.fabAddEvent
 
         // Listener for user interaction in the `Add Event` button.
         addEventButton.setOnClickListener {
-            // Only execute the following code when the user fills all `EditText`.
+
+            // Only execute the following code when the user fills all fields
             if (eventName.text.toString().isNotEmpty()
             && eventLocation.text.toString().isNotEmpty()
             && eventDate.text.toString().isNotEmpty()
             && eventType.hasSelection()
             && eventDescription.text.toString().isNotEmpty()) {
+
                 // Update the object attributes.
-                event.setEventName(
-                    eventName.text.toString().trim()
-                )
-                event.setEventLocation(
-                    eventLocation.text.toString().trim()
-                )
-                event.setEventDate(
-                    LocalDateTime.parse(eventDate.text.toString().trim())
-                )
-                event.setEventType(
-                    eventType.text.toString().trim()
-                )
-                event.setEventDescription(
-                    eventDescription.text.toString().trim()
-                )
+                event.eventName = eventName.text.toString().trim()
+                event.eventLocation = eventLocation.text.toString().trim()
+                event.eventDate = LocalDateTime.parse(eventDate.text.toString().trim())
+                event.eventType = eventType.text.toString().trim()
+                event.eventDescription = eventDescription.text.toString().trim()
+
                 // Write in the `Logcat` system.
                 showMessage()
             }
