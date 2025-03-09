@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.EditText
 import androidx.core.view.WindowCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import dk.itu.moapd.copenhagenbuzz.aybo.models.Event
-import dk.itu.moapd.copenhagenbuzz.aybo.R
 import dk.itu.moapd.copenhagenbuzz.aybo.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 
@@ -52,28 +52,26 @@ class MainActivity : AppCompatActivity() {
 
         // Listener for user interaction in the `Add Event` button.
         addEventButton.setOnClickListener {
-
             // Only execute the following code when the user fills all fields
             if (eventName.text.toString().isNotEmpty()
             && eventLocation.text.toString().isNotEmpty()
             && eventDate.text.toString().isNotEmpty()
             && eventType.hasSelection()
             && eventDescription.text.toString().isNotEmpty()) {
-
                 // Update the object attributes.
                 event.eventName = eventName.text.toString().trim()
                 event.eventLocation = eventLocation.text.toString().trim()
                 event.eventDate = LocalDateTime.parse(eventDate.text.toString().trim())
                 event.eventType = eventType.text.toString().trim()
                 event.eventDescription = eventDescription.text.toString().trim()
-
-                // Write in the `Logcat` system.
-                showMessage()
             }
+
+            showMessage()
         }
     }
 
     private fun showMessage() {
+        Snackbar.make(binding.root, event.toString(), Snackbar.LENGTH_SHORT).show()
         Log.d(TAG, event.toString())
     }
 }
