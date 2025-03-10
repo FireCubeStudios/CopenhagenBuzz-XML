@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="dk.itu.moapd.materialdesign.MainActivity">
+    <item
+        android:id="@+id/add"
+        android:title="@string/add"
+        android:icon="@drawable/baseline_add_24"
+        android:contentDescription="@string/add"
+        app:showAsAction="ifRoom" />
 
     <!-- Shown when not logged in -->
     <item

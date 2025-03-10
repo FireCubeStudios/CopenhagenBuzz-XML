@@ -17,10 +17,18 @@
             android:minHeight="?attr/actionBarSize"
             app:title="@string/app_name"
             app:menu="@menu/main_top_app_bar"
-            app:titleCentered="true"/>
+            app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
         android:id="@+id/content_main"
         layout="@layout/content_main" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/main_bottom_navigation_bar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

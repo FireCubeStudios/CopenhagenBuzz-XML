@@ -2,43 +2,26 @@ package dk.itu.moapd.copenhagenbuzz.aybo.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.EditText
 import androidx.core.view.WindowCompat
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dk.itu.moapd.copenhagenbuzz.aybo.R
-import dk.itu.moapd.copenhagenbuzz.aybo.models.Event
 import dk.itu.moapd.copenhagenbuzz.aybo.databinding.ActivityMainBinding
-import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
     // A set of private constants used in this class. (exercise 1)
     private lateinit var binding: ActivityMainBinding
-    companion object {
+    companion object { // Can be used in Log.d, not used right now
         private val TAG = MainActivity::class.qualifiedName
     }
 
     private lateinit var topAppBar: MaterialToolbar
-    private lateinit var eventName: EditText
-    private lateinit var eventLocation: EditText
-    private lateinit var eventDate: EditText
-    private lateinit var eventType: MaterialAutoCompleteTextView
-    private lateinit var eventDescription: EditText
-    private lateinit var addEventButton: FloatingActionButton
-
-    // An instance of the `Event` class. (exercise 1)
-    private val event: Event = Event(
-        eventName = "",
-        eventLocation = "",
-        eventDate = LocalDateTime.now(),
-        eventType = "",
-        eventDescription = ""
-    )
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false) // exercise 1 code
@@ -48,35 +31,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.topAppBar)
 
+        bottomNavigationView = binding.bottomNavigation
         topAppBar = binding.topAppBar
-        eventName = binding.contentMain.editTextEventName
-        eventLocation = binding.contentMain.editTextEventLocation
-        eventDate = binding.contentMain.editTextEventDate
-        eventType = binding.contentMain.autoCompleteEventType
-        eventDescription = binding.contentMain.editTextEventDescription
-        addEventButton = binding.contentMain.fabAddEvent
-
-        // Listener for user interaction in the `Add Event` button.
-        addEventButton.setOnClickListener {
-            // Only execute the following code when the user fills all fields
-            if (eventName.text.toString().isNotEmpty()
-            && eventLocation.text.toString().isNotEmpty()
-            && eventDate.text.toString().isNotEmpty()
-            && eventType.hasSelection()
-            && eventDescription.text.toString().isNotEmpty()) {
-                // Update the object attributes.
-                event.eventName = eventName.text.toString().trim()
-                event.eventLocation = eventLocation.text.toString().trim()
-                event.eventDate = LocalDateTime.parse(eventDate.text.toString().trim())
-                event.eventType = eventType.text.toString().trim()
-                event.eventDescription = eventDescription.text.toString().trim()
-            }
-
-            showMessage()
-        }
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.add -> {
+                    AddEventBottomSheet().show(supportFragmentManager, AddEventBottomSheet.TAG)
+                    true
+                }
                 R.id.login -> {
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
@@ -90,6 +53,11 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val navController = navHostFragment.navController
+        bottomNavigationView.setupWithNavController(navController)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -102,10 +70,5 @@ class MainActivity : AppCompatActivity() {
         menu.findItem(R.id.login).isVisible = !intent.getBooleanExtra("IsLoggedIn", false)
         menu.findItem(R.id.logout).isVisible = intent.getBooleanExtra("IsLoggedIn", false)
         return true
-    }
-
-    private fun showMessage() {
-        Snackbar.make(binding.root, event.toString(), Snackbar.LENGTH_SHORT).show()
-        Log.d(TAG, event.toString())
     }
 }

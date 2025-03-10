@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/timelineFragment"
+        android:enabled="true"
+        android:title="@string/timeline"
+        android:icon="@drawable/baseline_event_24"/>
+
+    <item
+        android:id="@+id/favoritesFragment"
+        android:enabled="true"
+        android:title="@string/favorites"
+        android:icon="@drawable/baseline_favorite_24"/>
+
+    <item
+        android:id="@+id/mapsFragment"
+        android:enabled="true"
+        android:title="@string/maps"
+        android:icon="@drawable/baseline_map_24"/>
+
+   <!-- <item
+        android:id="@+id/calendarFragment"
+        android:enabled="true"
+        android:title="@string/calendar"
+        android:icon="@drawable/baseline_calendar_today_24"/>-->
+</menu>
