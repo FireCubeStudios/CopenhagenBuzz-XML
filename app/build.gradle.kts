@@ -39,7 +39,8 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.squareup.picasso)
+    implementation(libs.javafaker)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

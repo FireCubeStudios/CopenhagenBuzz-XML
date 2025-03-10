@@ -1,11 +1,19 @@
 package dk.itu.moapd.copenhagenbuzz.aybo.ui.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.javafaker.Faker
 import dk.itu.moapd.copenhagenbuzz.aybo.R
+import dk.itu.moapd.copenhagenbuzz.aybo.databinding.ActivityMainBinding
+import dk.itu.moapd.copenhagenbuzz.aybo.databinding.FragmentTimelineBinding
+import dk.itu.moapd.copenhagenbuzz.aybo.models.DummyModel
+import dk.itu.moapd.copenhagenbuzz.aybo.ui.Adapters.EventAdapter
+import java.time.LocalDateTime
+import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,6 +26,32 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class TimelineFragment : Fragment() {
+    private lateinit var binding: FragmentTimelineBinding
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val faker = Faker()
+        binding.apply {
+            val data = ArrayList<DummyModel>()
+            (1..10).forEach { it ->
+                val address = faker.address()
+                data.add(
+                    DummyModel(
+                        eventName = "Event name",
+                        eventLocation = address.streetAddress(),
+                        eventDescription = faker.lorem().paragraph(),
+                        eventDate = "Fri, Jan 31 2025 - Sun, Feb 23 2025",
+                        eventType = "Event Type",
+                        eventPhoto = Uri.parse("https://picsum.photos/seed/$it/400/194")
+                    ),
+                )
+            }
+            // Define the list view adapter.
+            val adapter = EventAdapter(requireContext(), R.layout.event_row_item, data)
+            listView.adapter = adapter
+        }
+    }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,8 +68,9 @@ class TimelineFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentTimelineBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_timeline, container, false)
+        return binding.root
     }
 
     companion object {
